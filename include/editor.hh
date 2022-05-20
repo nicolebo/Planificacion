@@ -13,7 +13,7 @@
 
 #include <qwidget.h>
 #include <qmenubar.h>
-#include <qmultilinedit.h>
+#include <q3multilineedit.h>
 #include <qprinter.h>
 #include <qstring.h>
 #include <qstatusbar.h>
@@ -21,13 +21,13 @@
 
 
 // Sólo quiero que cuando se mueva el curso se emita una señal !!!!
-class Papel_t: public QMultiLineEdit {
+class Papel_t: public Q3MultiLineEdit {
 
  Q_OBJECT
 public:
 
  Papel_t( QWidget *parent=0, const char *name=0 ): 
-   QMultiLineEdit(parent,name){};
+   Q3MultiLineEdit(parent,name){};
   ~Papel_t(){};
 signals:
   void cursor_Changed();
@@ -37,7 +37,7 @@ protected:
   void  keyPressEvent ( QKeyEvent * e ) {
     emit (cursor_Changed());
 
-    QMultiLineEdit::keyPressEvent ( e );
+    Q3MultiLineEdit::keyPressEvent ( e );
   }
 };
   

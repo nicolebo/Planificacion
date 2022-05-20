@@ -24,11 +24,11 @@
 // *** Defines ************************************************
 
 #define NUM_TAREAS	50
-#define NOMBRE_LEN	30
+#define NOMBRE_LEN	100
 
-#define MAX_RECURSOS	10	// Incluido el procesador
-#define MAX_TAREAS	30
-#define	MAX_SUBTAREAS	30
+#define MAX_RECURSOS	100	// Incluido el procesador
+#define MAX_TAREAS	100
+#define	MAX_SUBTAREAS	100
 
 #define OK		0
 

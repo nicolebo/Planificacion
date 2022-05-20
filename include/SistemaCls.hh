@@ -1,4 +1,4 @@
-// *************************************************************************
+	// *************************************************************************
 // 
 //  Departamento de Informática de Sistema y Computadores (DISCA)
 //  Universidad Politecnica de Valencia.                         
@@ -20,6 +20,7 @@
 // *** Includes ***********************************************
 
 #include <stdio.h>
+#include <cstdlib>
 #include "CargaCls.hh"
 #include "EventosCls.hh"
 #include "ProcesadorCls.hh"
@@ -292,7 +293,7 @@ SistemaCls<CPUPlanif_c,RECPlanif_c>::Simula
 	default:
 	  fprintf(stderr, "ERROR de implementación:\n"
 		  "  Fich: %s Linea: %d\n", __FILE__, __LINE__);
-	  exit (1);
+	  std::exit (1);
 	  break;
 	} // endswitch
 

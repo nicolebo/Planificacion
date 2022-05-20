@@ -19,8 +19,9 @@
 
 // *** Includes ***********************************************
 
-#include <list.h>
+#include <list>
 #include "tipos.h"
+#include "functional"
 
 // *** Constantes *********************************************
 
@@ -89,7 +90,7 @@ private:
 
 // **** CLASE 'EventosCls' ****
 
-class EventosCls : public list<evento_c>
+class EventosCls : public std::list<evento_c>
 {
 public:
   EventosCls () 
@@ -140,10 +141,10 @@ public:
 };
 
 // Lista de eventos unitarios 
-typedef list<evento_c> lista_eventos_c;
+typedef std::list<evento_c> lista_eventos_c;
 
 // Transforma un evento normal en una lista de eventos unitarios
-struct trocea_eventos : public unary_function<evento_c, void> 
+struct trocea_eventos : public std::unary_function<evento_c, void> 
 {
   trocea_eventos(lista_eventos_c& lista_eventos)
     : lst_eventos(lista_eventos) 
@@ -176,7 +177,7 @@ struct trocea_eventos : public unary_function<evento_c, void>
 // Ordenación de eventos unitarios
 
 struct menor_evento 
-  : public binary_function<evento_c, evento_c, bool> 
+  : public std::binary_function<evento_c, evento_c, bool> 
 {
   bool operator()(const evento_c& e1, const evento_c& e2) const 
     { 

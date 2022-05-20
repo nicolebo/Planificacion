@@ -19,8 +19,9 @@
 
 // *** Includes ***********************************************
 
-#include <vector.h>
-#include <stack.h>
+#include <vector>
+#include <stack>
+#include <queue>
 #include "tipos.h"
 
 // *** Constantes *********************************************
@@ -32,13 +33,13 @@
 
 // Cola ordenada fifo de tareas
 typedef 
-queue<tarea_activa_t*>
+std::queue<tarea_activa_t*>
 cola_fifo_c;
 
-struct menor_llegada 
-  : public binary_function<tarea_activa_t*, tarea_activa_t*, bool> 
+struct menor_llegada
+  : public std::binary_function<tarea_activa_t*, tarea_activa_t*, bool> 
 {
-  bool operator()(const tarea_activa_t*& t1, const tarea_activa_t*& t2) const 
+  bool operator()(tarea_activa_t* t1, tarea_activa_t* t2) const 
     { 
       return (t1->llegada > t2->llegada || 
 	      (t1->llegada == t2->llegada && 
@@ -47,9 +48,9 @@ struct menor_llegada
 };
 
 struct menor_prioridad 
-  : public binary_function<tarea_activa_t*, tarea_activa_t*, bool> 
+  : public std::binary_function<tarea_activa_t*, tarea_activa_t*, bool> 
 {
-  bool operator()(const tarea_activa_t*& t1, const tarea_activa_t*& t2) const 
+  bool operator()(tarea_activa_t* t1, tarea_activa_t* t2) const 
     { 
       return (t1->prioridad > t2->prioridad || 
 	      (t1->prioridad == t2->prioridad && 
@@ -61,9 +62,9 @@ struct menor_prioridad
 };
 
 struct menor_computo 
-  : public binary_function<tarea_activa_t*, tarea_activa_t*, bool> 
+  : public std::binary_function<tarea_activa_t*, tarea_activa_t*, bool> 
 {
-  bool operator()(const tarea_activa_t*& t1, const tarea_activa_t*& t2) const 
+  bool operator()(tarea_activa_t* t1, tarea_activa_t* t2) const 
     { 
       return (t1->computo > t2->computo || 
 	      (t1->computo == t2->computo && 
@@ -76,22 +77,22 @@ struct menor_computo
 
 // Cola ordenada de tareas basada en el instante de llegada
 typedef 
-priority_queue<tarea_activa_t*,
-  vector<tarea_activa_t*>,
+std::priority_queue<tarea_activa_t*,
+  std::vector<tarea_activa_t*>,
   menor_llegada>
 cola_llegada_c;
 
 // Cola ordenada de tareas basada en prioridades fijas
 typedef 
-priority_queue<tarea_activa_t*,
-  vector<tarea_activa_t*>,
+std::priority_queue<tarea_activa_t*,
+  std::vector<tarea_activa_t*>,
   menor_prioridad>
 cola_prioridad_c;
 
 // Cola ordenada de tareas basada en el tiempo de computo 
 typedef 
-priority_queue<tarea_activa_t*,
-  vector<tarea_activa_t*>,
+std::priority_queue<tarea_activa_t*,
+  std::vector<tarea_activa_t*>,
   menor_computo>
 cola_computo_c;
 

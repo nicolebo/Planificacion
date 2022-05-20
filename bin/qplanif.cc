@@ -1,12 +1,12 @@
 // Fichero: qplanif.cc
 //
-// Aplicacion: qplanif 
+// Aplicacion: qplanif
 //
 // Desc: Simulador de planificadores de CPU y recursos para GNU/Linux basado en QT 1.40
 //
 // Autores:	Ismael Ripoll <iripoll@disca.upv.es>
 //		Sergio Saez <ssaez@disca.upv.es>
-// 
+//
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
 // Free Software Foundation; either version 2, or (at your option) any
@@ -19,8 +19,7 @@
 //
 
 
-
-#include <qapplication.h>
+#include <QApplication>
 #include "planificador.hh"
 
 int main( int argc, char ** argv ) {
@@ -30,10 +29,10 @@ int main( int argc, char ** argv ) {
 
 
 
-    
+
 //    Parsea_fichero("task.def");
     //    a.setMainWidget(mw);
-    mw->setCaption( "Simulador de algoritmos de planificación  (Software Libre, GPL)" );
+    mw->setCaption( "Logre editarlo - Nicolas Lebovits es el rey  (Software Libre, GPL)" );
     mw->show();
     QObject::connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
     return a.exec();
@@ -43,4 +42,4 @@ int main( int argc, char ** argv ) {
 Editor* Planificador::editor= 0;
 
 // Tocke chanchullo del "C++"
-// Canvas* Planificador::TareasAisladas = 0;  
+// Canvas* Planificador::TareasAisladas = 0;

@@ -1,15 +1,14 @@
 
-#include "crono.h"
-#include <qpopmenu.h>
-#include <qkeycode.h>
-#include <qapp.h>
-#include <qmsgbox.h>
+//#include "crono.h"
+#include <q3popupmenu.h>
+#include <qapplication.h>
+#include <qmessagebox.h>
 #include <qpixmap.h>
 #include <qframe.h>
-#include <qscrbar.h>
-#include <qfiledlg.h>  
+#include <qscrollbar.h>
+#include <qfiledialog.h>  
 #include <qpoint.h>
-#include <qpntarry.h>
+#include <q3pointarray.h>
 #include <qwmatrix.h>
 #include <qcolor.h>
 #include <qpen.h>

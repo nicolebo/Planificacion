@@ -6,14 +6,13 @@
 #include "tipos.h"
 #include "tareas.hh"
 
-#include <qpopmenu.h>
-#include <qkeycode.h>
-#include <qmsgbox.h>
+#include <q3popupmenu.h>
+#include <qmessagebox.h>
 #include <qframe.h>
-#include <qscrbar.h>
-#include <qfiledlg.h>  
+#include <qscrollbar.h>
+#include <qfiledialog.h>  
 #include <qpoint.h>
-#include <qpntarry.h>
+#include <q3pointarray.h>
 #include <qwmatrix.h>
 #include <qcolor.h>
 #include <qpen.h>
@@ -21,8 +20,8 @@
 
 
 
-Tareas_ventana::Tareas_ventana():QListView(NULL){
-  QListViewItem *tmp,*padre;
+Tareas_ventana::Tareas_ventana():Q3ListView(NULL){
+  Q3ListViewItem *tmp,*padre;
   char cade[100];
 
   addColumn( "             Atributo" );
@@ -36,7 +35,7 @@ Tareas_ventana::Tareas_ventana():QListView(NULL){
   
 
   for (int x=0; x<num_tareas; x++){
-    tmp = new QListViewItem( this, Tareas[x].nombre, 0 );
+    tmp = new Q3ListViewItem( this, Tareas[x].nombre, 0 );
     //    tmp->setOpen ( TRUE);  
     sprintf(cade,"%d",Tareas[x].prioridad);
     new TareaViewItem ( tmp, "Prioridad",cade,0);
@@ -47,7 +46,7 @@ Tareas_ventana::Tareas_ventana():QListView(NULL){
     tmp->setExpandable( TRUE );
     //tmp->setOpen(TRUE);
 
-    QListViewItem *sub = new QListViewItem ( tmp, "Secuencia de Ejecución",0);
+    Q3ListViewItem *sub = new Q3ListViewItem ( tmp, "Secuencia de Ejecución",0);
     for (int y=0; y<= Tareas[x].Nsubtareas; y++){
       char str_computo[100];
 

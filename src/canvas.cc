@@ -6,28 +6,28 @@
 #include "tipos.h"
 #include "input.tab.h"   
 #include "canvas.hh"
-#include <qpopmenu.h>
-#include <qkeycode.h>
-#include <qapp.h>
-#include <qmsgbox.h>
+#include <q3popupmenu.h>
+#include <qapplication.h>
+#include <qmessagebox.h>
 #include <qpixmap.h>
 #include <qframe.h>
-#include <qscrbar.h>
-#include <qfiledlg.h>  
+#include <qscrollbar.h>
+#include <qfiledialog.h>  
 #include <qpoint.h>
-#include <qpntarry.h>
+#include <q3pointarray.h>
 #include <qwmatrix.h>
 #include <qcolor.h>
 #include <qpen.h>
 #include <math.h>
 #include <qtooltip.h> 
+#include <q3painter.h> 
 
 
 //------------------------------ AND old crono functions -------------
 
 Canvas::Canvas( QWidget *parent, const char *name )
   : QWidget( parent, name ){
-  setBackgroundColor(white);
+  setBackgroundColor(Qt::white);
   grid = 1;
   scroll= 0;
   zoom = 20;
@@ -38,19 +38,19 @@ Canvas::Canvas( QWidget *parent, const char *name )
   area_de_nombres =  new Pizarra_Cls (this);
   area_de_nombres->setFrameStyle( QFrame::Box | QFrame::Raised );
   area_de_nombres->setGeometry(0,0,100,height());
-  area_de_nombres->setBackgroundColor(lightGray);
+  area_de_nombres->setBackgroundColor(Qt::lightGray);
   area_de_nombres->setMidLineWidth(2);
 
   area_de_cronograma =  new Pizarra_Cls (this);
   area_de_cronograma->setGeometry(0,0,100,height()-16);
-  area_de_cronograma->setBackgroundColor(white);
+  area_de_cronograma->setBackgroundColor(Qt::white);
   area_de_cronograma->setMidLineWidth(2);
 
 
 
 
-  hscroll =new QScrollBar(0,0,10,500,0,QScrollBar::Horizontal, area_de_cronograma);
-  CHECK_PTR( hscroll );
+  hscroll =new QScrollBar(0,0,10,500,0,Qt::Horizontal, area_de_cronograma);
+  Q_CHECK_PTR( hscroll );
 
   //  hscroll->setStyle(WindowsStyle);  
 
@@ -93,7 +93,7 @@ void Canvas::setGrid(int g){
 
 //------------------------------------------------------------------------------
 void Canvas::Limpia(){
-  QPainter p;
+  Q3Painter p;
   
   p.begin(area_de_nombres);
   p.eraseRect(4,4,area_de_nombres->width()-8, area_de_nombres->height()-8);
@@ -103,12 +103,16 @@ void Canvas::Limpia(){
   p.eraseRect(0,0,width(),height());
   p.end();
   
+  /*
   QToolTip::remove(area_de_nombres,QRect(0,0,
 					 area_de_nombres->width(),
 					 area_de_nombres->height()));
   QToolTip::remove(area_de_cronograma,QRect(0,0,
 					    area_de_cronograma->width(),
 					    area_de_cronograma->height()));
+  */
+  QToolTip::remove(area_de_nombres);
+  QToolTip::remove(area_de_cronograma);
 
 
   final_simulacion=0;
@@ -154,7 +158,7 @@ void Canvas::finalizado_dibujo(){
 
 
   p.begin(area_de_cronograma);
-  p.setPen( QPen(DotLine));
+  p.setPen( QPen(Qt::DotLine));
   if (grid > 0 ){    
     for (int x=0; (x<10000) &&   (X <=  area_de_cronograma->width()) ; x += grid) {
       Linea = mat_escalado.map(QPoint(x,(x%5) == 0 ? -20:-10));
@@ -165,15 +169,15 @@ void Canvas::finalizado_dibujo(){
 	// Poner los números de la regla. y marcarlos más cada 5 unidades.
 	sprintf(cade,"%d",x);
 	p.drawText(X,15,cade,strlen(cade));
-	p.setPen(QPen(DashDotLine));
+	p.setPen(QPen(Qt::DashDotLine));
 	p.drawLine(Linea, QPoint(Linea.rx(),area_de_cronograma->height()));
-	p.setPen( QPen(DotLine));
+	p.setPen( QPen(Qt::DotLine));
       } else {
 	p.drawLine(Linea, QPoint(Linea.rx(),area_de_cronograma->height()));
       }
     }
   }
-  p.setPen( QPen(SolidLine));
+  p.setPen( QPen(Qt::SolidLine));
   for (int y=0; y< num_tareas; y++){
     X=y*40+24+ESPACIO_REGLA;
     p.drawLine(0, X, area_de_cronograma->width(), X);
@@ -203,11 +207,11 @@ void Canvas::Dibuja(const evento_c &evento){
 
   QRect r;
 
-  static QColor gama_col[]={ cyan, darkRed, darkGreen, darkBlue,
-			     darkCyan, darkMagenta, darkYellow,
-			     lightGray, green, blue, red, magenta,
-			     yellow, black, white,
-			     darkGray, gray};   
+  static QColor gama_col[]={ Qt::cyan, Qt::darkRed, Qt::darkGreen, Qt::darkBlue,
+			     Qt::darkCyan, Qt::darkMagenta, Qt::darkYellow,
+			     Qt::lightGray, Qt::green, Qt::blue, Qt::red, Qt::magenta,
+			     Qt::yellow, Qt::black, Qt::white,
+			     Qt::darkGray, Qt::gray};   
 
   QBrush c(gama_col[evento.Recurso() % 17]);
   static struct {
@@ -241,7 +245,7 @@ void Canvas::Dibuja(const evento_c &evento){
     return;
 
   p.begin(area_de_cronograma);    
-  p.setPen( QPen(SolidLine));
+  p.setPen( QPen(Qt::SolidLine));
   p.setBrush( c );   
 
   switch(evento.Tipo()){
@@ -252,7 +256,7 @@ void Canvas::Dibuja(const evento_c &evento){
 
     p.drawPie(r,3840,960);
     if (evento.Recurso() != 0 ){
-      p.setPen((QColor)black);
+      p.setPen((QColor)Qt::black);
       p.setFont( QFont( "helvetica", 8 ));
       p.drawText(point.x(),point.y()+9, Recursos[evento.Recurso()].nombre);
     }

@@ -13,10 +13,10 @@
 
 
 #include <qcheckbox.h> 
-#include <qmainwindow.h>
+#include <q3mainwindow.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
-#include <qmultilinedit.h>
+#include <Q3MultiLineEdit>
 #include "tipos.h"
 
 #include "canvas.hh"
@@ -33,11 +33,11 @@
 #include "ayuda.hh"
 #include "editor.hh"
 
-class QToolBar;
-class QPopupMenu;
+class Q3ToolBar;
+class Q3PopupMenu;
 
 
-class Planificador: public QMainWindow
+class Planificador: public Q3MainWindow
 {
     Q_OBJECT
 public:
@@ -86,14 +86,14 @@ protected:
     Canvas   *canvas;
 
 
-    QToolBar *fileTools;
-    QToolBar *controlTools;
-    QToolBar   *pasoTools;
-    QPopupMenu *controls;
+    Q3ToolBar *fileTools;
+    Q3ToolBar *controlTools;
+    Q3ToolBar   *pasoTools;
+    Q3PopupMenu *controls;
     QCheckBox *paso;
     QSpinBox *seleccion_quantum;
     QSpinBox *seleccion_paso;
-    QMultiLineEdit *ayu;
+    Q3MultiLineEdit *ayu;
   
     int mb, tb, sb , th;
     int politica_planificador_actual; 

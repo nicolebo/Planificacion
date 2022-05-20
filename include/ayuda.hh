@@ -4,14 +4,14 @@
 
 #include <qwidget.h>
 #include <qmenubar.h>
-#include <qmultilinedit.h>
+#include <q3multilineedit.h>
 #include <qprinter.h>
 
-#include <map.h>
+#include <map>
 #include <string.h>
 
 struct menor_cadena 
-  : public binary_function<const char*,const char*, bool> 
+  : public std::binary_function<const char*,const char*, bool> 
 {
   bool operator()(const char* t1, const char* t2) const 
     { 
@@ -20,10 +20,10 @@ struct menor_cadena
 };
 
 
-typedef map<const char*,const char*,menor_cadena>	ayudas_t;
+typedef std::map<const char*,const char*,menor_cadena>	ayudas_t;
 
 
-class AyudaCls : public QWidget
+class AyudaCls : private QWidget
 {
     Q_OBJECT
 public:
@@ -46,8 +46,8 @@ protected:
 
 private:
   QMenuBar       *m;
-  QMultiLineEdit *e;
-  QPopupMenu  *temas;
+  Q3MultiLineEdit *e;
+  Q3PopupMenu  *temas;
   ayudas_t 	Ayudas;
 
 };         

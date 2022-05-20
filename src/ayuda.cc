@@ -4,12 +4,11 @@
 #include <qapplication.h>
 #include <qfile.h>
 #include <qfiledialog.h>
-#include <qkeycode.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qtextstream.h>
 #include <qpainter.h>
 #include <qmessagebox.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
 #include <qlist.h>
 #include <qpaintdevice.h> 
 
@@ -59,7 +58,7 @@ const char* ayuda_SRTF=
 
 // ******
 
-typedef QList<AyudaCls> AyudaClsList;
+typedef QList<AyudaCls*> AyudaClsList;
 
 static AyudaClsList *spawnedAyudaClss = 0; 
 				// list of editors spawned by
@@ -70,17 +69,17 @@ AyudaCls::AyudaCls( QWidget * parent , const char * name )
 {
   
   m = new QMenuBar( this, "menu" );
-  CHECK_PTR(m);
+  Q_CHECK_PTR(m);
 
-  QPopupMenu *files = new QPopupMenu();
-  CHECK_PTR(files);
+  Q3PopupMenu *files = new Q3PopupMenu();
+  Q_CHECK_PTR(files);
   m->insertItem( "Archivos", files);  
   files->insertItem( "Nueva ventana",   this, SLOT(newDoc()));
   files->insertItem ("Cerrar", this, SLOT (closeDoc()));
 
 
-  temas = new QPopupMenu();
-  CHECK_PTR( temas );
+  temas = new Q3PopupMenu();
+  Q_CHECK_PTR( temas );
 
   m->insertItem( "Temas de Ayuda", temas );
   temas->insertItem("General");
@@ -117,7 +116,7 @@ AyudaCls::AyudaCls( QWidget * parent , const char * name )
 
   connect( temas, SIGNAL(activated(int)), SLOT(ayuda_elegida(int)) );
   
-  e = new QMultiLineEdit( this, "editor" );
+  e = new Q3MultiLineEdit( this, "editor" );
   load(ayuda_general);
   
   e->setReadOnly(true);
@@ -131,7 +130,7 @@ AyudaCls::AyudaCls( QWidget * parent , const char * name )
 
 AyudaCls::~AyudaCls() {
   if ( spawnedAyudaClss ) {
-    spawnedAyudaClss->removeRef( this );       // does nothing if not in list
+    spawnedAyudaClss->removeAll( this );       // does nothing if not in list
     if ( spawnedAyudaClss->count() == 0 ) {
       delete spawnedAyudaClss;
       spawnedAyudaClss = 0;
@@ -175,7 +174,7 @@ void AyudaCls::resizeEvent( QResizeEvent * )
 void AyudaCls::closeEvent( QCloseEvent * )
 {
   if ( spawnedAyudaClss &&
-       spawnedAyudaClss->findRef(this) != -1 ){ // Was it created by newDoc()?
+       spawnedAyudaClss->indexOf(this) != -1 ){ // Was it created by newDoc()?
     delete this;                            // Goodbye cruel world!
   } else {
     hide();                                 // Original editor, just hide

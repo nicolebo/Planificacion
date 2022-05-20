@@ -1,5 +1,5 @@
 %{
-#include "input.tab.h"
+#include "../include/input.tab.h"
 extern int linenumber;
 %}
 
@@ -38,4 +38,4 @@ PRIORIDAD {return PRIORIDAD;}
 
 ","   { return yytext[0];}
 
-
+%%

@@ -10,7 +10,7 @@
 
 #include "planificador.hh"
 //#include "tareas.hh"
-#include <algo.h>
+#include <algorithm>
 
 #include "SistemaCls.hh"
 #include "EventosCls.hh"
@@ -24,26 +24,25 @@
 
 #include <qcheckbox.h> 
 #include <qpixmap.h>
-#include <qtoolbar.h>
+#include <q3toolbar.h>
 #include <qtoolbutton.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qmenubar.h>
-#include <qkeycode.h>
-#include <qmultilinedit.h>
+#include <q3multilineedit.h>
 #include <qfile.h>
 #include <qfiledialog.h>
 #include <qstatusbar.h>
 #include <qmessagebox.h>
 #include <qapplication.h>
-#include <qaccel.h>
+#include <q3accel.h>
 #include <qtextstream.h>
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 #include <qspinbox.h>
 #include <qlabel.h>
-
+#include <qstyle.h>
 
 #include "fileopen.xpm"
 //#include "fileprint.xpm"
@@ -52,7 +51,7 @@
 extern "C" {int    Parsea_fichero(char *);}
 
 
-typedef QList<Planificador> PlanificadorList;
+typedef QList<Planificador*> PlanificadorList;
 
 static PlanificadorList *spawnedPlanificadores = 0;          // list of  editors spawned by
                                                 // Editor::newDoc()
@@ -60,7 +59,7 @@ static PlanificadorList *spawnedPlanificadores = 0;          // list of  editors
 
 
 Planificador::Planificador(int contador)
-    : QMainWindow( 0, "Políticas de planificación de procesadores" )
+    : Q3MainWindow( 0, "Politicas de planificacion de procesadores" )
 {
     QPixmap openIcon, saveIcon, tareaIcon;
 
@@ -104,17 +103,18 @@ Planificador::Planificador(int contador)
 
     // Ejecución paso a paso o todo de golpe.
 
-    pasoTools = new QToolBar( "paso",  this, Top, FALSE , "Pasos");
+    //pasoTools = new Q3ToolBar( QString::fromLocal8Bit("paso"),  this, Qt::DockTop, FALSE , "Pasos");
+    pasoTools = new Q3ToolBar( this, "Pasos");
     //    new QLabel("                    ", fileTools);  //Un poco cutre.. sólo sirve para separar.
     paso = new QCheckBox("Ejecución paso a paso",pasoTools) ;
-    paso->setStyle(WindowsStyle);
+    //paso->setStyle(QStyle::WindowsStyle);
     paso ->setChecked(true);
     QToolTip::add(paso, "Ejecución paso a paso\no ejecución completa");
     QToolTip::add(new QLabel ("   Instante ", pasoTools), "Tiempo de Simulación");
     seleccion_paso= new QSpinBox( 1, 10000, 1,pasoTools, "paso");
 
     QToolTip::add( seleccion_paso , "Instante de Simulación" );
-    seleccion_paso->setStyle(WindowsStyle);
+    //seleccion_paso->setStyle(QStyle::WindowsStyle);
     seleccion_paso->setEnabled(true);
 
     connect ( seleccion_paso, SIGNAL( valueChanged(int)), this, SLOT(setPaso(int)));
@@ -124,7 +124,8 @@ Planificador::Planificador(int contador)
 
 
     
-    controlTools = new QToolBar( "cosa",  this, Top, TRUE , "Heramientas");
+    //controlTools = new Q3ToolBar( "cosa",  this, Top, TRUE , "Heramientas");
+    controlTools = new Q3ToolBar( this, "Heramientas");
     
 
     seleccion_planificadores = new QComboBox(FALSE, controlTools, "Planificadores" );
@@ -136,7 +137,7 @@ Planificador::Planificador(int contador)
       seleccion_planificadores->insertItem( NombrePlanificadores[x] );
           connect( seleccion_planificadores, SIGNAL(activated(int)), SLOT(planificador_elegido(int)) );
     QToolTip::add( seleccion_planificadores , "Selecciona el planificador\nvisualizar" );
-    seleccion_planificadores->setStyle(WindowsStyle);
+    //seleccion_planificadores->setStyle(WindowsStyle);
 
 
 
@@ -148,7 +149,7 @@ Planificador::Planificador(int contador)
       seleccion_recursos->insertItem( NombrePlanificadores[x] );
           connect( seleccion_recursos, SIGNAL(activated(int)), SLOT(recurso_elegido(int)) );
     QToolTip::add( seleccion_recursos , "Selecciona la política\nde gestión de recursos" );
-    seleccion_recursos->setStyle(WindowsStyle);
+    //seleccion_recursos->setStyle(WindowsStyle);
 
 
     // Eleccion del cuantum
@@ -156,7 +157,7 @@ Planificador::Planificador(int contador)
     seleccion_quantum= new QSpinBox( 1, 100, 1,controlTools, "Quantum control");
     connect ( seleccion_quantum, SIGNAL( valueChanged(int)), this, SLOT(setQuantum(int)));
     QToolTip::add( seleccion_quantum , "Quantum del Sistema" );
-    seleccion_quantum->setStyle(WindowsStyle);
+    //seleccion_quantum->setStyle(WindowsStyle);
     seleccion_quantum->setEnabled(false);
 
 
@@ -165,7 +166,7 @@ Planificador::Planificador(int contador)
     QSpinBox *grid = new QSpinBox( 0, 100, 1,controlTools, "Grid control");
     connect ( grid , SIGNAL( valueChanged(int)), canvas, SLOT(setGrid(int)));
     QToolTip::add( grid , "Ajuste del grid" );
-    grid->setStyle(WindowsStyle);
+    //grid->setStyle(WindowsStyle);
     grid->setValue(1);
     grid->setSpecialValueText("No grid");
     
@@ -175,30 +176,30 @@ Planificador::Planificador(int contador)
     connect ( zoom , SIGNAL( valueChanged(int)), canvas, SLOT(setZoom(int)));
     QToolTip::add( zoom , "Ajuste del zoom" );
     zoom->setValue(20);
-    zoom->setStyle(WindowsStyle);
+    //zoom->setStyle(WindowsStyle);
 
 
     
-    QPopupMenu * file = new QPopupMenu();
+    Q3PopupMenu * file = new Q3PopupMenu();
 
     menuBar()->insertItem( "&Archivos", file );
 
-    file->insertItem( "&Nueva ventana", this, SLOT(newDoc()), CTRL+Key_N );
-    file->insertItem( openIcon, "&Abrir", this, SLOT(cargar()), CTRL+Key_A );
+    file->insertItem( "&Nueva ventana", this, SLOT(newDoc()), Qt::CTRL+Qt::Key_N );
+    file->insertItem( openIcon, "&Abrir", this, SLOT(cargar()), Qt::CTRL+Qt::Key_A );
     // Se le pide al editor que guarde su contenido.
     //    file->insertItem( saveIcon, "&Guardar", editor, SLOT(save()), CTRL+Key_G );
-    file->insertItem( tareaIcon, "&Editar", editor, SLOT(show()), CTRL+Key_E );
+    file->insertItem( tareaIcon, "&Editar", editor, SLOT(show()), Qt::CTRL+Qt::Key_E );
     file->insertSeparator();
-    file->insertItem( "&Cerrar", this, SLOT(closeDoc()), CTRL+Key_W );
-    file->insertItem( "&Salir", qApp, SLOT(quit()), CTRL+Key_Q );
+    file->insertItem( "&Cerrar", this, SLOT(closeDoc()), Qt::CTRL+Qt::Key_W );
+    file->insertItem( "&Salir", qApp, SLOT(quit()), Qt::CTRL+Qt::Key_Q );
 
-    controls = new QPopupMenu();
+    controls = new Q3PopupMenu();
     menuBar()->insertItem( "&Controles", controls );
 
 
     //    tb = controls->insertItem( "Barra de &Ficheros", this, SLOT(toggleToolBar()), CTRL+Key_F);
-    th = controls->insertItem( "Barra de &Herramientas", this, SLOT(toggleHerrBar()), CTRL+Key_H);
-    sb = controls->insertItem( "Barra de &Estado", this, SLOT(toggleStatusBar()), CTRL+Key_E);
+    th = controls->insertItem( "Barra de &Herramientas", this, SLOT(toggleHerrBar()), Qt::CTRL+Qt::Key_H);
+    sb = controls->insertItem( "Barra de &Estado", this, SLOT(toggleStatusBar()), Qt::CTRL+Qt::Key_E);
     controls->setCheckable( TRUE );
     controls->setItemChecked( th, TRUE );
     controls->setItemChecked( tb, TRUE );
@@ -207,10 +208,10 @@ Planificador::Planificador(int contador)
 
     menuBar()->insertSeparator();
 
-    QPopupMenu* ayuda = new QPopupMenu();
+    Q3PopupMenu* ayuda = new Q3PopupMenu();
     menuBar()->insertItem( "&Ayuda", ayuda );
     ayuda->insertItem( "&Autores", this, SLOT(mostrarAutores()) );
-    ayuda->insertItem( "&Temas de Ayuda", this, SLOT(mostrarAyuda()), Key_F1 );
+    ayuda->insertItem( "&Temas de Ayuda", this, SLOT(mostrarAyuda()), Qt::Key_F1 );
     ayuda->insertSeparator();
     ayuda->insertItem( "Acerca de &Qt", this, SLOT(aboutQt()) );
                          
@@ -235,7 +236,7 @@ Planificador::Planificador(int contador)
 Planificador::~Planificador() {
 
   if ( spawnedPlanificadores ) {
-    spawnedPlanificadores ->removeRef( this );	 // does nothing if not in list
+    spawnedPlanificadores ->removeAll( this );	 // does nothing if not in list
     if ( spawnedPlanificadores->count() == 0 ) {
       delete spawnedPlanificadores;
       spawnedPlanificadores = 0;
@@ -267,7 +268,7 @@ void Planificador::newDoc()
 //----------------------------------------------------------------
 void Planificador::cargar(const char * nombre){
   
-  int linea_error = Parsea_fichero(nombre);
+  int linea_error = Parsea_fichero((char*)nombre);
   
   if (y_error != -1) {
     statusBar()->message( "Carga Abortada");
@@ -304,8 +305,9 @@ void Planificador::cargar() {
     
     if (fn.length()>=1000) 
       return ;
-    for (x=0; x<fn.length(); x++)
-      nombre[x] = fn[x];
+    for (x=0; x<fn.length(); x++) {
+      nombre[x] = fn[x].toAscii();
+    }
     nombre[x] = 0;
     
     Parsea_fichero(nombre);
@@ -342,7 +344,7 @@ void Planificador::setTareasNuevas(int lecturas){
   }
 }
 //----------------------------------------------------------------
-struct dibuja_canvas : public unary_function<evento_c, void> 
+struct dibuja_canvas : public std::unary_function<evento_c, void> 
 {
   dibuja_canvas(Canvas &canvas,  bool paso_a_paso=false, int pos=0):
     cv(canvas), pap(paso_a_paso), fin(pos) {};
@@ -362,7 +364,7 @@ struct dibuja_canvas : public unary_function<evento_c, void>
 
 //----------------------------------------------------------------
 // Cuando se llama a actualiza la lista de eventos ya ha de estar creada.
-void Planificador::actualiza(bool hay_que_limpiar=true){
+void Planificador::actualiza(bool hay_que_limpiar){
   char cade[1000];
   tiempo_t computo;
 
@@ -435,7 +437,7 @@ void Planificador::closeDoc(){
 //----------------------------------------------------------------
 void Planificador::closeEvent(QCloseEvent *){
  if ( spawnedPlanificadores && 
-	 spawnedPlanificadores->findRef(this) != -1 ){	// Was it created by newDoc()?
+	 spawnedPlanificadores->indexOf(this) != -1 ){	// Was it created by newDoc()?
 	delete this;				// Goodbye cruel world!
     } else {
 	hide();					// Original editor, just hide

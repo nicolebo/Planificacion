@@ -9,8 +9,8 @@
 #include <qframe.h>
 #include <qwmatrix.h>
 
-#include <qscrbar.h>
-#include <qscrollview.h> 
+#include <qscrollbar.h>
+#include <q3scrollview.h> 
 #include "EventosCls.hh"
 
 #define ESPACIO_REGLA  40
