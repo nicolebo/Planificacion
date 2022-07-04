@@ -1,3 +1,4 @@
+
 /****************************************************************************
 ** Pizarra_Cls meta object code from reading C++ file 'canvas.hh'
 **

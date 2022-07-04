@@ -491,7 +491,7 @@ int yy_flex_debug = 0;
 char *yytext;
 #line 1 "linput.l"
 #line 2 "linput.l"
-#include "include/input.tab.h"
+#include "../include/input.tab.h"
 extern int linenumber;
 #line 497 "linput.c"
 
